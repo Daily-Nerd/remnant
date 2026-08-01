@@ -1,85 +1,25 @@
-# REMNANT
-### *Civilizational Memory Infrastructure*
+# REMNANT — archived
 
 > Because the worst thing a civilization can do is solve a problem twice.
 
-REMNANT is an epistemic decay monitoring system. It tracks the attention half-life of human knowledge across fields, detects when practitioners are about to re-derive something already solved, and brokers cross-domain concept translations before the wheel gets reinvented.
+One-evening research scaffold (June 2026) for epistemic decay monitoring —
+tracking when solved knowledge loses salience and gets re-derived.
 
----
+**Archived deliberately.** The same evening it was scaffolded, a six-critic
+internal review (preserved in [`docs/findings/`](docs/findings/)) found the
+core outputs unvalidatable as built: citation data was never populated, so
+every decay score was noise, and collision detection could not distinguish
+*approaching* a concept from *mentioning* it. The honest conclusion was to
+stop, not to iterate.
 
-## The Problem
+The thesis lives on where it is tractable and measurable:
 
-You have Google. You have arXiv. You have every paper ever written.
+- **[Scar](https://github.com/Daily-Nerd/Scar)** — negative knowledge at
+  repository scale: recorded dead ends fire before an agent repeats them.
+- **[daimon](https://github.com/Daily-Nerd/daimon)** — session memory with
+  verifiable claims; salience via proactive recall, decay via evidence-gated
+  staleness handling.
 
-But **knowing something is stored somewhere** and **knowing it exists when you need it** are completely different things.
-
-- Bacteriophage therapy was standard Soviet medicine in the 1940s. "Discovered" again in 2020 as antibiotic resistance peaked — decades of patient deaths in the gap.
-- Eventual consistency, vector clocks, gossip protocols — all in Bell Labs papers from the 70s. Every few years a startup "invents" them.
-- The Tacoma Narrows Bridge (1940): the failure mode was documented in earlier bridge collapses. The knowledge existed. It wasn't salient.
-
-This isn't ignorance. This is a structural failure in how knowledge stays alive.
-
----
-
-## What REMNANT Does
-
-**Five layers:**
-
-| Layer | What it does |
-|-------|-------------|
-| **Ingestion** | Continuous indexing of arXiv, PubMed, ACM, patents, SO, HN, GitHub |
-| **Concept Extraction** | Maps the *underlying idea* independent of vocabulary — same concept, three fields, one node |
-| **Decay Modeling** | Tracks attention half-life per concept-node; flags when important ideas go dark |
-| **Collision Detection** | Detects ambient signal that someone is re-deriving something — alerts *before* the question is formed |
-| **Translation Brokering** | Surfaces concepts from Field A to practitioners in Field B, in their vocabulary |
-
----
-
-## Architecture
-
-```
-remnant/
-├── ingestion/      # Source adapters (arxiv, pubmed, web, github)
-├── extraction/     # Concept extraction + semantic fingerprinting
-├── decay/          # Temporal salience modeling + decay scoring
-├── collision/      # Problem-pattern detection + alert generation
-├── translation/    # Cross-domain concept translation engine
-├── graph/          # Knowledge graph (NetworkX + persistent store)
-└── alerts/         # Notification delivery (email, webhook, CLI)
-```
-
----
-
-## Quickstart
-
-```bash
-git clone https://github.com/Daily-Nerd/remnant
-cd remnant
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-cp .env.example .env   # add your API keys
-
-# Seed the corpus with a domain
-remnant ingest --source arxiv --domain "distributed systems" --years 20
-
-# Check decay scores for a domain
-remnant decay --domain "distributed systems" --top 20
-
-# Run collision detection against a query
-remnant detect --query "we keep having cascade failures in our microservices"
-
-# Get a cross-domain translation
-remnant translate --concept "phase transitions" --from-field physics --to-field "organizational behavior"
-```
-
----
-
-## Roadmap
-
-See [docs/ROADMAP.md](docs/ROADMAP.md).
-
----
-
-## License
-
-MIT — Daily-Nerd
+The critic reviews in `docs/findings/` remain the most useful artifact here —
+including the observation that embedding similarity measures shared
+vocabulary, not epistemic stance, which later informed daimon's recall work.
